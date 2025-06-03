@@ -96728,8 +96728,8 @@ const httpm = __importStar(__nccwpck_require__(4844));
 const utils_1 = __nccwpck_require__(1798);
 const TOKEN = core.getInput('token');
 const AUTH = !TOKEN ? undefined : `token ${TOKEN}`;
-const MANIFEST_REPO_OWNER = 'actions';
-const MANIFEST_REPO_NAME = 'python-versions';
+const MANIFEST_REPO_OWNER = 'adilhusain-s';
+const MANIFEST_REPO_NAME = 'actions-runner-python-versions';
 const MANIFEST_REPO_BRANCH = 'main';
 exports.MANIFEST_URL = `https://raw.githubusercontent.com/${MANIFEST_REPO_OWNER}/${MANIFEST_REPO_NAME}/${MANIFEST_REPO_BRANCH}/versions-manifest.json`;
 function findReleaseFromManifest(semanticVersionSpec, architecture, manifest) {
