@@ -96980,17 +96980,27 @@ function run() {
             const freethreaded = core.getBooleanInput('freethreaded');
             if (versions.length) {
                 let pythonVersion = '';
-                const arch = core.getInput('architecture') || os.arch();
+                let arch = core.getInput('architecture') || os.arch(); // Original line
+                // --- ADD THIS LOGIC HERE ---
+                // If os.arch() returns 'ppc64', we assume it's ppc64le for this action.
+                // This is a common scenario where Node.js reports 'ppc64' for 'ppc64le' systems.
+                if (arch === 'ppc64') {
+                    core.info(`Detected architecture as 'ppc64', adjusting to 'ppc64le' for download purposes.`);
+                    arch = 'ppc64le';
+                }
+                // --- END ADDITION ---
                 const updateEnvironment = core.getBooleanInput('update-environment');
                 core.startGroup('Installed versions');
                 for (const version of versions) {
                     if (isPyPyVersion(version)) {
-                        const installed = yield finderPyPy.findPyPyVersion(version, arch, updateEnvironment, checkLatest, allowPreReleases);
+                        const installed = yield finderPyPy.findPyPyVersion(version, arch, // 'arch' variable is used here
+                        updateEnvironment, checkLatest, allowPreReleases);
                         pythonVersion = `${installed.resolvedPyPyVersion}-${installed.resolvedPythonVersion}`;
                         core.info(`Successfully set up PyPy ${installed.resolvedPyPyVersion} with Python (${installed.resolvedPythonVersion})`);
                     }
                     else if (isGraalPyVersion(version)) {
-                        const installed = yield finderGraalPy.findGraalPyVersion(version, arch, updateEnvironment, checkLatest, allowPreReleases);
+                        const installed = yield finderGraalPy.findGraalPyVersion(version, arch, // 'arch' variable is used here
+                        updateEnvironment, checkLatest, allowPreReleases);
                         pythonVersion = `${installed}`;
                         core.info(`Successfully set up GraalPy ${installed}`);
                     }
@@ -96998,7 +97008,8 @@ function run() {
                         if (version.startsWith('2')) {
                             core.warning('The support for python 2.7 was removed on June 19, 2023. Related issue: https://github.com/actions/setup-python/issues/672');
                         }
-                        const installed = yield finder.useCpythonVersion(version, arch, updateEnvironment, checkLatest, allowPreReleases, freethreaded);
+                        const installed = yield finder.useCpythonVersion(version, arch, // 'arch' variable is used here
+                        updateEnvironment, checkLatest, allowPreReleases, freethreaded);
                         pythonVersion = installed.version;
                         core.info(`Successfully set up ${installed.impl} (${pythonVersion})`);
                     }
@@ -97010,7 +97021,7 @@ function run() {
                 }
             }
             else {
-                core.warning('The `python-version` input is not set.  The version of Python currently in `PATH` will be used.');
+                core.warning('The `python-version` input is not set. The version of Python currently in `PATH` will be used.');
             }
             const matchersPath = path.join(__dirname, '../..', '.github');
             core.info(`##[add-matcher]${path.join(matchersPath, 'python.json')}`);
