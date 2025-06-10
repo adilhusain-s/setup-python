@@ -96,14 +96,24 @@ async function run() {
 
     if (versions.length) {
       let pythonVersion = '';
-      const arch: string = core.getInput('architecture') || os.arch();
+      let arch: string = core.getInput('architecture') || os.arch(); // Original line
+
+      // --- ADD THIS LOGIC HERE ---
+      // If os.arch() returns 'ppc64', we assume it's ppc64le for this action.
+      // This is a common scenario where Node.js reports 'ppc64' for 'ppc64le' systems.
+      if (arch === 'ppc64') {
+        core.info(`Detected architecture as 'ppc64', adjusting to 'ppc64le' for download purposes.`);
+        arch = 'ppc64le';
+      }
+      // --- END ADDITION ---
+
       const updateEnvironment = core.getBooleanInput('update-environment');
       core.startGroup('Installed versions');
       for (const version of versions) {
         if (isPyPyVersion(version)) {
           const installed = await finderPyPy.findPyPyVersion(
             version,
-            arch,
+            arch, // 'arch' variable is used here
             updateEnvironment,
             checkLatest,
             allowPreReleases
@@ -115,7 +125,7 @@ async function run() {
         } else if (isGraalPyVersion(version)) {
           const installed = await finderGraalPy.findGraalPyVersion(
             version,
-            arch,
+            arch, // 'arch' variable is used here
             updateEnvironment,
             checkLatest,
             allowPreReleases
@@ -126,11 +136,11 @@ async function run() {
           if (version.startsWith('2')) {
             core.warning(
               'The support for python 2.7 was removed on June 19, 2023. Related issue: https://github.com/actions/setup-python/issues/672'
-            );
+              );
           }
           const installed = await finder.useCpythonVersion(
             version,
-            arch,
+            arch, // 'arch' variable is used here
             updateEnvironment,
             checkLatest,
             allowPreReleases,
@@ -147,7 +157,7 @@ async function run() {
       }
     } else {
       core.warning(
-        'The `python-version` input is not set.  The version of Python currently in `PATH` will be used.'
+        'The `python-version` input is not set. The version of Python currently in `PATH` will be used.'
       );
     }
     const matchersPath = path.join(__dirname, '../..', '.github');
