@@ -508,11 +508,11 @@ Such a requirement on side-effect could be because you don't want your composite
     - If `3.12.1` is installed for example, and `3.12.2` is released, expect `3.12.1` to be removed and replaced by `3.12.2` in the tool cache.
     - If the exact patch version doesn't matter to you, specifying just the major and minor versions will get you the latest preinstalled patch version. In the previous example, the version spec `3.12` will use the `3.12.2` Python version found in the cache.
     - Use `-dev` instead of a patch number (e.g., `3.14-dev`) to install the latest patch version release for a given minor version, *alpha and beta releases included*.
-- Downloadable Python versions from GitHub Releases ([actions/python-versions](https://github.com/actions/python-versions/releases)).
-    - All available versions are listed in the [version-manifest.json](https://github.com/actions/python-versions/blob/main/versions-manifest.json) file.
+Downloadable Python versions from GitHub Releases ([actions-runner-python-versions](https://github.com/adilhusain-s/actions-runner-python-versions/releases)).
+    - All available versions are listed in the [version-manifest.json](https://github.com/adilhusain-s/actions-runner-python-versions/blob/main/versions-manifest.json) file.
     - If there is a specific version of Python that is not available, you can open an issue here
 
->**Note:** Python versions used in this action are generated in the [python-versions](https://github.com/actions/python-versions) repository. For macOS and Ubuntu images, python versions are built from the source code. For Windows, the python-versions repository uses installation executable. For more information please refer to the [python-versions](https://github.com/actions/python-versions) repository.
+>**Note:** Python versions used in this action are generated in the [actions-runner-python-versions](https://github.com/adilhusain-s/actions-runner-python-versions) repository. For macOS and Ubuntu images, python versions are built from the source code. For Windows, the actions-runner-python-versions repository uses installation executable. For more information please refer to the [actions-runner-python-versions](https://github.com/adilhusain-s/actions-runner-python-versions) repository.
 
 ### PyPy
 
@@ -588,7 +588,7 @@ One quick way to grant access is to change the user and group of the non-default
 
 ### macOS
 
- The Python packages for macOS that are downloaded from `actions/python-versions` are originally compiled from the source in `/Users/runner/hostedtoolcache`. Due to the fixed shared library path, these Python packages are non-relocatable and require to be installed only in `/Users/runner/hostedtoolcache`. Before the use of `setup-python` on the macOS self-hosted runner:
+ The Python packages for macOS that are downloaded from `actions-runner-python-versions` are originally compiled from the source in `/Users/runner/hostedtoolcache`. Due to the fixed shared library path, these Python packages are non-relocatable and require to be installed only in `/Users/runner/hostedtoolcache`. Before the use of `setup-python` on the macOS self-hosted runner:
  
  - Create a directory called `/Users/runner/hostedtoolcache`
  - Change the permissions of `/Users/runner/hostedtoolcache` so that the runner has write access
@@ -609,7 +609,7 @@ One quick way to grant access is to change the user and group of `/Users/runner/
 
 ### Avoiding rate limit issues
 
-`setup-python` comes pre-installed on the appliance with GHES if Actions is enabled. When dynamically downloading Python distributions, `setup-python` downloads distributions from [`actions/python-versions`](https://github.com/actions/python-versions) on github.com (outside of the appliance). These calls to `actions/python-versions` are by default made via unauthenticated requests, which are limited to [60 requests per hour per IP](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting). If more requests are made within the time frame, then the action leverages the `raw API` to retrieve the version-manifest. This approach does not impose a rate limit and hence facilitates unrestricted consumption. This is particularly beneficial for GHES runners, which often share the same IP due to Network Address Translation (NAT), to avoid the quick exhaustion of the unauthenticated rate limit.
+`setup-python` comes pre-installed on the appliance with GHES if Actions is enabled. When dynamically downloading Python distributions, `setup-python` downloads distributions from [`actions-runner-python-versions`](https://github.com/adilhusain-s/actions-runner-python-versions) on github.com (outside of the appliance). These calls to `actions-runner-python-versions` are by default made via unauthenticated requests, which are limited to [60 requests per hour per IP](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting). If more requests are made within the time frame, then the action leverages the `raw API` to retrieve the version-manifest. This approach does not impose a rate limit and hence facilitates unrestricted consumption. This is particularly beneficial for GHES runners, which often share the same IP due to Network Address Translation (NAT), to avoid the quick exhaustion of the unauthenticated rate limit.
 
 ### No access to github.com
 

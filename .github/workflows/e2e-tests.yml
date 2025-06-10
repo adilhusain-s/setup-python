@@ -91,5 +91,5 @@ jobs:
         run: python __tests__/verify-python.py 3.12
       - name: Test Raw Endpoint Access
         run: |
-          curl -L https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json | jq empty
+          curl -L https://raw.githubusercontent.com/adilhusain-s/actions-runner-python-versions/main/versions-manifest.json | jq empty
         shell: bash
